@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.java.openjdk.shinyafox</groupId>
+    <artifactId>jshell-maven-plugin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>maven-plugin</packaging>
+
+    <name>JShell Maven Plugin</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.4</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--add-exports</arg>
+                        <arg>jdk.jshell/jdk.internal.jshell.tool=net.java.openjdk.shinyafox.jshell.maven</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+                <version>3.4</version>
+                <configuration>
+                    <!-- because it cannot accept Java9 -->
+                    <skipDescriptor>true</skipDescriptor>
+                </configuration>
+            </plugin>
+
+            <!-- dog fooding -->
+            <plugin>
+                <groupId>net.java.openjdk.shinyafox</groupId>
+                <artifactId>jshell-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
