@@ -5,9 +5,7 @@ This maven plugin helps you to explore your codes and dependencies in your maven
 (Now I'm working on deploying this to Central Repository. Until done, please clone this repository and install by your hand.)
 
 ```
-JAVA_HOME=/path/to/your/jdk9 \
-MAVEN_OPTS="--add-exports jdk.jshell/jdk.internal.jshell.tool=ALL-UNNAMED" \
-mvn clean install
+JAVA_HOME=/path/to/your/jdk9 mvn clean install
 ```
 It requires version `3.3.9` or something like that for `mvn`.
 
@@ -27,9 +25,7 @@ Add following to your pom.xml:
 
 and type following in your project:
 ```
-JAVA_HOME=/path/to/your/jdk9 \
-MAVEN_OPTS="--add-exports jdk.jshell/jdk.internal.jshell.tool=ALL-UNNAMED" \
-mvn jshell:jshell
+JAVA_HOME=/path/to/your/jdk9 mvn jshell:compile
 ```
 
 It requires version `3.3.9` or something like that for `mvn`.
