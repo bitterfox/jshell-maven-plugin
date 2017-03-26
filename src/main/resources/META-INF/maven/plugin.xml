@@ -13,7 +13,7 @@
   <inheritedByDefault>true</inheritedByDefault>
   <mojos>
     <mojo>
-      <goal>jshell</goal>
+      <goal>compile</goal>
       <requiresDependencyResolution>compile+runtime</requiresDependencyResolution>
       <requiresDirectInvocation>true</requiresDirectInvocation>
       <requiresProject>true</requiresProject>

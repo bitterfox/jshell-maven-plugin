@@ -5,10 +5,14 @@
  */
 package net.java.openjdk.shinyafox.jshell.maven.plugin;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.ServiceLoader;
 import java.util.stream.Collectors;
+import javax.tools.Tool;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -22,14 +26,16 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  * @author bitter_fox
  */
 @Mojo(
-        name = "jshell",
+        name = "compile",
         defaultPhase = LifecyclePhase.INSTALL,
         requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
         requiresDependencyCollection = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
 public class JShellMavenPlugin extends AbstractMojo {
 
-    @Parameter( defaultValue = "${project.compileClasspathElements}", readonly = true, required = true )
+    private static final String JSHELL_NAME = "jshell";
+
+    @Parameter(defaultValue = "${project.compileClasspathElements}", readonly = true, required = true)
     private List<String> compilePath;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -38,13 +44,17 @@ public class JShellMavenPlugin extends AbstractMojo {
 
             String path = compilePath.stream()
                     .filter(p -> Files.exists(Paths.get(p)))
-                    .collect(Collectors.joining(":"));
+                    .collect(Collectors.joining(File.pathSeparator));
 
             getLog().info("Starting jshell with " + path);
-            jdk.internal.jshell.tool.JShellToolProvider.main(new String[]{
-                    "--class-path", path,
-                    "-C-classpath", "-C"+path
-            });
+            for (Tool tool : ServiceLoader.load(Tool.class)) {
+                if (JSHELL_NAME.equals(tool.name())) {
+                    tool.run(null, null, null, new String[]{
+                        "--class-path", path,});
+                    return;
+                }
+            }
+            throw new NoSuchElementException("jshell tool not found");
         } catch (Exception e) {
             getLog().error(e);
             throw new MojoExecutionException("Cannot execute jshell. ", e);
