@@ -10,6 +10,13 @@ JAVA_HOME=/path/to/your/jdk9 mvn clean install
 It requires version `3.3.9` or something like that for `mvn`.
 
 ## Getting started
+### Run plugin from mvn command line without editing pom.xml
+Run following
+```
+JAVA_HOME=/path/to/your/jdk9 mvn net.java.openjdk.shinyafox:jshell-maven-plugin:1.0-SNAPSHOT:compile
+```
+
+### Configure your pom.xml to reduce your future types
 Add following to your pom.xml:
 ```
     <build>
